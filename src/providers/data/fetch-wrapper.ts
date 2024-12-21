@@ -33,7 +33,7 @@ export const getGraphQLErrors = (
   if ("errors" in body && body.errors) {
     const errors = body.errors;
     const messages = errors.map((error) => error.message).join("");
-    const code = errors.[0].extensions.code;
+    const code = errors?.[0]?.extensions?.code;
 
     return {
       message: messages || JSON.stringify(errors),

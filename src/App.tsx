@@ -1,7 +1,6 @@
 import { Authenticated, GitHubBanner, Refine } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
-
 import {
   ErrorComponent,
   ThemedLayoutV2,
@@ -10,10 +9,8 @@ import {
 } from "@refinedev/antd";
 import "@refinedev/antd/dist/reset.css";
 
-import dataProvider, {
-  GraphQLClient,
-  liveProvider,
-} from "@refinedev/nestjs-query";
+import { authProvider, dataProvider, liveProvider } from "./providers";
+
 import routerBindings, {
   CatchAllNavigate,
   DocumentTitleHandler,
@@ -39,11 +36,8 @@ import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
 
-const API_URL = "https://api.nestjs-query.refine.dev/graphql";
-const WS_URL = "wss://api.nestjs-query.refine.dev/graphql";
-
-const gqlClient = new GraphQLClient(API_URL);
-const wsClient = createClient({ url: WS_URL });
+// const gqlClient = new GraphQLClient(API_URL);
+// const wsClient = createClient({ url: WS_URL });
 
 function App() {
   return (
@@ -53,11 +47,11 @@ function App() {
         <AntdApp>
           <DevtoolsProvider>
             <Refine
-              dataProvider={dataProvider(gqlClient)}
-              liveProvider={liveProvider(wsClient)}
+              dataProvider={dataProvider}
+              liveProvider={liveProvider}
               notificationProvider={useNotificationProvider}
               routerProvider={routerBindings}
-              // authProvider={authProvider}
+              authProvider={authProvider}
               resources={[
                 {
                   name: "blog_posts",
@@ -88,6 +82,7 @@ function App() {
                 liveMode: "auto",
               }}
             >
+
               <Routes>
                 <Route
                   element={
@@ -103,7 +98,7 @@ function App() {
                     </Authenticated>
                   }
                 >
-                  <Route
+                  {/* <Route
                     index
                     element={<NavigateToResource resource="blog_posts" />}
                   />
@@ -119,8 +114,9 @@ function App() {
                     <Route path="edit/:id" element={<CategoryEdit />} />
                     <Route path="show/:id" element={<CategoryShow />} />
                   </Route>
-                  <Route path="*" element={<ErrorComponent />} />
+                  <Route path="*" element={<ErrorComponent />} /> */}
                 </Route>
+                <Route index element={<Home />} />
                 <Route
                   element={
                     <Authenticated
@@ -136,6 +132,7 @@ function App() {
                   <Route path="/forgot-password" element={<ForgotPassword />} />
                 </Route>
               </Routes>
+
               <RefineKbar />
               <UnsavedChangesNotifier />
               <DocumentTitleHandler />
