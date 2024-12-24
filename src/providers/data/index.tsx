@@ -5,6 +5,7 @@ import graphqlDataProvider, {
 import { createClient } from "graphql-ws";
 import { customFetch, getGraphQLErrors } from "./fetch-wrapper";
 
+// TODO: create backend and update the API_BASE_URL
 export const API_BASE_URL = "https://api.crm.refine.dev";
 export const API_URL = `${API_BASE_URL}/graphql`
 export const WS_URL = "wss://api.crm.refine.dev/graphql";
