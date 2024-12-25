@@ -1,6 +1,6 @@
 import React from "react";
 import { ThemedTitleV2, ThemedLayoutV2 } from "@refinedev/antd";
-import Header from "./header";
+import Header from "./Header";
 
 function Layout({ children }: React.PropsWithChildren) {
   return (
