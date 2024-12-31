@@ -5,7 +5,16 @@ import { useNotificationProvider } from "@refinedev/antd";
 import "@refinedev/antd/dist/reset.css";
 
 import { authProvider, dataProvider, liveProvider } from "./providers";
-import { Home, ForgotPassword, Login, Register, CompanyList } from "./pages";
+import {
+  Home,
+  ForgotPassword,
+  Login,
+  Register,
+  CompanyList,
+  CreateCompany,
+  EditCompany,
+  C
+} from "./pages";
 import { resources } from "./config/resources";
 
 import routerBindings, {
@@ -16,6 +25,7 @@ import routerBindings, {
 import { App as AntdApp } from "antd";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router";
 import Layout from "./components/layout";
+import TasksList from "./pages/tasksLists/TasksList";
 
 // const gqlClient = new GraphQLClient(API_URL);
 // const wsClient = createClient({ url: WS_URL });
@@ -58,7 +68,14 @@ function App() {
                   }
                 >
                   <Route index element={<Home />} />
-                  <Route path="/companies" element={<CompanyList />} />
+                  <Route path="/companies">
+                    <Route index element={<CompanyList />} />
+                    <Route path="new" element={<CreateCompany />} />
+                    <Route path="edit/:id" element={<EditCompany />} />
+                  </Route>
+                  <Route path="/tasks">
+                    <Route index element={<TasksList />} />
+                  </Route>
                 </Route>
               </Routes>
 

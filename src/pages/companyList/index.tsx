@@ -15,7 +15,7 @@ import { COMPANIES_LIST_QUERY } from "@/graphql/queries";
 import { Company } from "@/graphql/schema.types";
 import { currencyNumber } from "@/utilities";
 
-export const CompanyList = () => {
+export const CompanyList = ({ children }: React.PropsWithChildren) => {
   const go = useGo();
   const { tableProps, filters } = useTable({
     resource: "companies",
@@ -43,64 +43,67 @@ export const CompanyList = () => {
   });
 
   return (
-    <List
-      breadcrumb={false}
-      headerButtonProps={() => {
-        go({
-          to: { resource: "companies", action: "create" },
-          options: { keepQuery: true },
-          type: "replace",
-        });
-      }}
-    >
-      <Table {...tableProps} pagination={{ ...tableProps.pagination }}>
-        <Table.Column<Company>
-          dataIndex="name"
-          title="Company Title"
-          defaultFilteredValue={getDefaultFilter("id", filters)}
-          filterIcon={<SearchOutlined />}
-          filterDropdown={(props) => {
-            return (
-              <FilterDropdown {...props}>
-                <Input placeholder="Search Company" />
-              </FilterDropdown>
-            );
-          }}
-          render={(value, record) => {
-            return (
+    <div>
+      <List
+        breadcrumb={false}
+        headerButtonProps={() => {
+          go({
+            to: { resource: "companies", action: "create" },
+            options: { keepQuery: true },
+            type: "replace",
+          });
+        }}
+      >
+        <Table {...tableProps} pagination={{ ...tableProps.pagination }}>
+          <Table.Column<Company>
+            dataIndex="name"
+            title="Company Title"
+            defaultFilteredValue={getDefaultFilter("id", filters)}
+            filterIcon={<SearchOutlined />}
+            filterDropdown={(props) => {
+              return (
+                <FilterDropdown {...props}>
+                  <Input placeholder="Search Company" />
+                </FilterDropdown>
+              );
+            }}
+            render={(value, record) => {
+              return (
+                <Space>
+                  <CustomAvatar
+                    shape="square"
+                    name={record.name}
+                    src={record.avatarUrl}
+                  />
+                  <Text style={{ whiteSpace: "nowrap" }}>{record.name}</Text>
+                </Space>
+              );
+            }}
+          />
+          <Table.Column<Company>
+            dataIndex="totalRevenue"
+            title="Open deals amount"
+            render={(value, company) => (
+              <Text>
+                {currencyNumber(company?.dealsAggregate?.[0].sum?.value || 0)}
+              </Text>
+            )}
+          />
+          <Table.Column<Company>
+            dataIndex="id"
+            title="Actions"
+            fixed="right"
+            render={(value) => (
               <Space>
-                <CustomAvatar
-                  shape="square"
-                  name={record.name}
-                  src={record.avatarUrl}
-                />
-                <Text style={{ whiteSpace: "nowrap" }}>{record.name}</Text>
+                <EditButton hideText size="small" recordItemId={value} />
+                <DeleteButton hideText size="small" recordItemId={value} />
               </Space>
-            );
-          }}
-        />
-        <Table.Column<Company>
-          dataIndex="totalRevenue"
-          title="Open deals amount"
-          render={(value, company) => (
-            <Text>
-              {currencyNumber(company?.dealsAggregate?.[0].sum?.value || 0)}
-            </Text>
-          )}
-        />
-        <Table.Column<Company>
-          dataIndex="id"
-          title="Actions"
-          fixed="right"
-          render={(value) => (
-            <Space>
-              <EditButton hideText size="small" recordItemId={value} />
-              <DeleteButton hideText size="small" recordItemId={value} />
-            </Space>
-          )}
-        />
-      </Table>
-    </List>
+            )}
+          />
+        </Table>
+      </List>
+      {children}
+    </div>
   );
 };
 
